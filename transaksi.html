@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="transaksi.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet"
+    />
+    <title>Transaksi - Riznadi GameStore</title>
+</head>
+<body>
+    <div class="header" id="header">
+        <div class="navbar">
+            <h3 style="color: black;">Riznadi GameStore</h3>
+            <div>
+                <a href="index.html">Beranda</a>
+                <a href="product.html">Produk</a>
+                <a href="transactions.html">Transaksi</a>
+                <a href="tentang.html">Tentang</a>
+            </div>
+        </div>
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Formulir Transaksi</h1>
+                <p>Masukkan detail transaksi di bawah ini.</p>
+            </div>
+            <form class="transaction-form" onsubmit="addTransaction(event)">
+                <label for="customer-name">Nama Pelanggan:</label>
+                <input type="text" id="customer-name" name="customer-name" required>
+
+                <label for="product">Pilih Produk:</label>
+                <select id="product" name="product" required>
+                    <option value="Game Console" data-price="299.99">Game Console - Rp299.99</option>
+                    <option value="Gaming Headset" data-price="150.00">Gaming Headset - Rp150.00</option>
+                    <option value="Gaming Chair" data-price="499.99">Gaming Chair - Rp499.99</option>
+                </select>
+
+                <label for="quantity">Jumlah:</label>
+                <input type="number" id="quantity" name="quantity" min="1" required>
+
+                <input type="submit" value="Tambah Transaksi">
+            </form>
+
+            <div class="transaction-table">
+                <h2>Rekaman Transaksi</h2>
+                <table id="transaction-records">
+                    <thead>
+                        <tr>
+                            <th>ID Transaksi</th>
+                            <th>Customer</th>
+                            <th>Produk</th>
+                            <th>Jumlah</th>
+                            <th>Jumlah Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Baris akan ditambahkan di sini oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Riznadi GameStore. Semua Hak Dilindungi.</p>
+        <p>Ikuti kami di:</p>
+        <div class="social-icons">
+            <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" /></a>
+            <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/6/60/Twitter_Logo_as_of_2021.svg" alt="Twitter" /></a>
+            <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" /></a>
+        </div>
+    </div>
+
+    <script>
+        var data = [];
+        var i = 0;
+
+        function addTransaction(event) {
+            event.preventDefault(); // Mencegah pengiriman formulir
+
+            // Ambil nilai formulir
+            var customerName = document.getElementById('customer-name').value;
+            var productSelect = document.getElementById('product');
+            var productText = productSelect.options[productSelect.selectedIndex].text;
+            var productPrice = parseFloat(productSelect.options[productSelect.selectedIndex].getAttribute('data-price'));
+            var quantity = parseInt(document.getElementById('quantity').value);
+            var amount = (productPrice * quantity).toFixed(2); // Hitung jumlah harga
+            var transactionId = 'TX' + (i + 1);
+
+            // Tambah ke array data
+            data[i] = {
+                id: transactionId,
+                customer: customerName,
+                product: productText,
+                quantity: quantity,
+                amount: 'Rp' + amount
+            };
+            i++;
+            updateTable(); // Perbarui tabel
+        }
+
+        function updateTable() {
+            var tableBody = document.getElementById('transaction-records').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Hapus baris yang ada
+
+            // Buat baris tabel
+            for (var j = 0; j < data.length; j++) {
+                var row = '<tr>' +
+                    '<td>' + data[j].id + '</td>' +
+                    '<td>' + data[j].customer + '</td>' +
+                    '<td>' + data[j].product + '</td>' +
+                    '<td>' + data[j].quantity + '</td>' +
+                    '<td>' + data[j].amount + '</td>' +
+                    '</tr>';
+                tableBody.innerHTML += row; // Tambahkan baris ke tubuh tabel
+            }
+        }
+    </script>
+</body>
+</html>
